@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#00A3FF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JobFlex">
+    <meta name="description" content="Encontre trabalhos temporários e receba por diária ou turno">
+    
+    <title>JobFlex - Trabalho Temporário</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="libs/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- SPLASH SCREEN -->
+        <div id="splashScreen" class="splash-screen">
+            <div class="splash-content">
+                <div class="splash-logo">
+                    <svg width="80" height="80" viewBox="0 0 100 100" fill="none">
+                        <circle cx="50" cy="50" r="45" fill="white" stroke="#00A3FF" stroke-width="3"/>
+                        <path d="M35 50 L45 60 L65 35" stroke="#00A3FF" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M50 20 L50 80 M20 50 L80 50" stroke="#00A3FF" stroke-width="2" stroke-dasharray="5 5"/>
+                    </svg>
+                </div>
+                <h1>JobFlex</h1>
+                <p>Trabalho temporário inteligente</p>
+                <div class="spinner"></div>
+            </div>
+        </div>
+        
+        <!-- TELA DE AUTENTICAÇÃO -->
+        <div id="authScreen" class="screen hidden">
+            <div class="auth-container">
+                <div class="auth-header">
+                    <div class="auth-logo">JF</div>
+                    <h1>JobFlex</h1>
+                    <p>Trabalhos temporários<br>sem burocracia</p>
+                </div>
+                
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">Entrar</button>
+                    <button class="tab-btn" data-tab="register">Cadastrar</button>
+                </div>
+                
+                <form id="loginForm" class="auth-form active">
+                    <div class="input-group">
+                        <i class="fas fa-phone-alt"></i>
+                        <input type="tel" id="loginWhatsapp" placeholder="WhatsApp (com DDD)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Senha" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-block">Entrar</button>
+                    <button type="button" id="forgotPasswordBtn" class="btn-link">Esqueci minha senha</button>
+                </form>
+                
+                <form id="registerForm" class="auth-form">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="regNome" placeholder="Nome completo" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="regCpf" placeholder="CPF" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-calendar-alt"></i>
+                        <input type="date" id="regNascimento" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fab fa-whatsapp"></i>
+                        <input type="tel" id="regWhatsapp" placeholder="WhatsApp (com DDD)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="regEmail" placeholder="E-mail (opcional)">
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-tools"></i>
+                        <select id="regFuncoes" multiple size="4">
+                            <option value="Garçom">Garçom</option>
+                            <option value="Cozinha">Cozinha</option>
+                            <option value="Limpeza">Limpeza</option>
+                            <option value="Promotor">Promotor</option>
+                            <option value="Reposição">Reposição</option>
+                            <option value="Carga/Descarga">Carga/Descarga</option>
+                            <option value="Atendimento">Atendimento</option>
+                            <option value="Apoio Logístico">Apoio Logístico</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-clock"></i>
+                        <select id="regDisponibilidade" required>
+                            <option value="">Selecione</option>
+                            <option value="Diurno">Diurno (manhã/tarde)</option>
+                            <option value="Noturno">Noturno (noite/madrugada)</option>
+                            <option value="Integral">Integral (qualquer horário)</option>
+                            <option value="Fim de semana">Fim de semana</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="regPassword" placeholder="Senha" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="regConfirmPassword" placeholder="Confirmar senha" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-block">Cadastrar</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- APP PRINCIPAL -->
+        <div id="mainApp" class="screen hidden">
+            <header class="app-header">
+                <div class="header-left"><i class="fas fa-bars menu-icon" id="menuToggle"></i></div>
+                <div class="header-center"><h2 id="pageTitle">Início</h2></div>
+                <div class="header-right"><i class="fas fa-bell notification-icon" id="notificationIcon"></i></div>
+            </header>
+            
+            <div id="sideMenu" class="side-menu hidden">
+                <div class="menu-header">
+                    <div class="user-avatar" id="userAvatar">👤</div>
+                    <div class="user-info"><h3 id="userName"></h3><p id="userStatus">Disponível</p></div>
+                </div>
+                <nav class="menu-nav">
+                    <button class="menu-item" data-page="dashboard"><i class="fas fa-home"></i> Início</button>
+                    <button class="menu-item" data-page="trabalhos"><i class="fas fa-briefcase"></i> Meus Trabalhos</button>
+                    <button class="menu-item" data-page="checkin"><i class="fas fa-qrcode"></i> Check-in</button>
+                    <button class="menu-item" data-page="carteira"><i class="fas fa-wallet"></i> Carteira</button>
+                    <button class="menu-item" data-page="perfil"><i class="fas fa-user"></i> Meu Perfil</button>
+                </nav>
+                <div class="menu-footer"><button id="logoutBtn" class="menu-item logout"><i class="fas fa-sign-out-alt"></i> Sair</button></div>
+            </div>
+            <div id="menuOverlay" class="menu-overlay hidden"></div>
+            
+            <div class="pages-container">
+                <div id="dashboardPage" class="page active">
+                    <div class="page-content">
+                        <div class="welcome-card"><div class="welcome-text"><h3 id="welcomeName"></h3><p id="welcomeDate"></p></div></div>
+                        <div class="section-header"><h3>Próximos Trabalhos</h3></div>
+                        <div id="proximosTrabalhos" class="cards-list"><div class="empty-state">Carregando...</div></div>
+                        <div class="section-header"><h3>Oportunidades</h3></div>
+                        <div id="oportunidades" class="cards-list"><div class="empty-state">Carregando...</div></div>
+                    </div>
+                </div>
+                
+                <div id="trabalhosPage" class="page">
+                    <div class="page-content">
+                        <div class="tabs-mini">
+                            <button class="tab-mini active" data-status="pendentes">Pendentes</button>
+                            <button class="tab-mini" data-status="confirmados">Confirmados</button>
+                            <button class="tab-mini" data-status="realizados">Realizados</button>
+                        </div>
+                        <div id="trabalhosList" class="cards-list"></div>
+                    </div>
+                </div>
+                
+                <div id="checkinPage" class="page">
+                    <div class="page-content">
+                        <button id="scanQRBtn" class="btn-primary btn-block btn-large"><i class="fas fa-qrcode"></i> Escanear QR Code</button>
+                        <button id="locationCheckinBtn" class="btn-secondary btn-block"><i class="fas fa-map-marker-alt"></i> Check-in por Localização</button>
+                        <div id="qrReaderContainer" class="qr-reader-container hidden"><div id="qr-reader"></div><button id="stopScannerBtn" class="btn-small">Cancelar</button></div>
+                    </div>
+                </div>
+                
+                <div id="carteiraPage" class="page">
+                    <div class="page-content">
+                        <div class="balance-card"><div class="balance-label">Saldo a Receber</div><div class="balance-value" id="balanceValue">R$ 0,00</div></div>
+                        <div class="section-header"><h3>Últimos Pagamentos</h3></div>
+                        <div id="ultimosPagamentos" class="payments-list"></div>
+                    </div>
+                </div>
+                
+                <div id="perfilPage" class="page">
+                    <div class="page-content">
+                        <div class="profile-header"><div class="profile-avatar" id="profileAvatar">👤</div><h2 id="profileName"></h2><button id="toggleStatusBtn" class="btn-small">Alterar Disponibilidade</button></div>
+                        <div class="profile-info" id="profileInfo"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="bottom-nav">
+                <button class="nav-item active" data-page="dashboard"><i class="fas fa-home"></i><span>Início</span></button>
+                <button class="nav-item" data-page="trabalhos"><i class="fas fa-briefcase"></i><span>Trabalhos</span></button>
+                <button class="nav-item" data-page="checkin"><i class="fas fa-qrcode"></i><span>Check-in</span></button>
+                <button class="nav-item" data-page="carteira"><i class="fas fa-wallet"></i><span>Carteira</span></button>
+                <button class="nav-item" data-page="perfil"><i class="fas fa-user"></i><span>Perfil</span></button>
+            </nav>
+        </div>
+        
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+    
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
